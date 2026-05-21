@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nuvana.go — Discover the World</title>
+  <meta name="description" content="Nuvana.go offers curated travel experiences, unforgettable journeys, and seamless travel planning from Kozhikode, Kerala." />
+  <link href="https://api.fontshare.com/v2/css?f[]=chillax@300,400,500,600,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet" />
+  <style>
+    /* ─── Design Tokens ─── */
+    :root {
+      --clr-bg:           #0d2330;
+      --clr-primary:      #027385;
+      --clr-accent:       #f99523;
+      --clr-accent-light: #fbb360;
+      --clr-secondary:    #efe7dc;
+      --clr-white:        #ffffff;
+      --clr-text-muted:   #a0aab2;
+      --glass-bg:         rgba(239,231,220,0.06);
+      --glass-border:     rgba(255,255,255,0.12);
+      --shadow-sm:        0 4px 16px rgba(0,0,0,0.18);
+      --shadow-md:        0 12px 32px rgba(0,0,0,0.28);
+      --shadow-lg:        0 24px 56px rgba(0,0,0,0.40);
+      --radius-sm:        12px;
+      --radius-md:        20px;
+      --radius-lg:        32px;
+      --transition:       0.38s cubic-bezier(0.25,0.46,0.45,0.94);
+      --font:             'Chillax', sans-serif;
+    }
+
+    /* ─── Reset ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: var(--font);
+      background: var(--clr-bg);
+      color: var(--clr-white);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; transition: var(--transition); }
+    ul { list-style: none; }
+    img { max-width: 100%; display: block; }
+    button { cursor: pointer; font-family: var(--font); border: none; background: none; }
+
+    /* ─── Utility ─── */
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+    .container--wide { max-width: 1400px; padding: 0 2rem; }
+    .section { padding: 6rem 0; position: relative; }
+    .gradient-text {
+      background: linear-gradient(135deg, var(--clr-accent), var(--clr-accent-light));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .subtitle {
+      display: inline-block;
+      color: var(--clr-accent);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .section-title { font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 700; line-height: 1.15; }
+    .text-center { text-align: center; }
+
+    /* ─── Brand Logo ─── */
+    .brand-logo {
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 45px;
+      object-fit: contain;
+      flex-shrink: 0; /* Prevents squishing in flex containers */
+      display: block;
+    }
+    .nav-logo-text {
+      font-size: 1.5rem; font-weight: 700; letter-spacing: -0.03em;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .nav-logo-text .dot { color: var(--clr-accent); }
+
+    /* ─── Buttons ─── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 0.85rem 2rem; border-radius: 50px;
+      font-weight: 600; font-size: 0.95rem; font-family: var(--font);
+      transition: var(--transition); position: relative; overflow: hidden;
+      border: none; cursor: pointer;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--clr-accent), var(--clr-accent-light));
+      color: var(--clr-white);
+      box-shadow: 0 6px 20px rgba(249,149,35,0.40);
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(249,149,35,0.55); }
+    .btn-glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border); color: var(--clr-white);
+    }
+    .btn-glass:hover { background: rgba(255,255,255,0.12); transform: translateY(-2px); }
+
+    /* ─── Navbar ─── */
+    .navbar {
+      position: fixed; top: 0; left: 0; width: 100%;
+      z-index: 100; padding: 1.5rem 0;
+      transition: var(--transition);
+    }
+    .navbar.scrolled {
+      background: rgba(13,35,48,0.92);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 1rem 0;
+      box-shadow: var(--shadow-sm);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { display: flex; align-items: center; z-index: 101; }
+    
+    .nav-links { display: flex; align-items: center; gap: 2rem; }
+    .nav-link {
+      font-size: 0.95rem; font-weight: 500; opacity: 0.8;
+      transition: var(--transition);
+    }
+    .nav-link:hover { opacity: 1; color: var(--clr-accent); }
+    
+    /* Special styling for Nuvana.ex */
+    .nav-link.highlight {
+      color: var(--clr-accent-light);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      opacity: 1;
+    }
+    .nav-link.highlight::after {
+      content: 'NEW';
+      background: rgba(249,149,35,0.2);
+      color: var(--clr-accent-light);
+      font-size: 0.6rem;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      margin-left: 0.25rem;
+      border: 1px solid rgba(249,149,35,0.4);
+    }
+
+    .nav-cta { display: flex; align-items: center; gap: 0.75rem; }
+    
+    /* Mobile Menu Button */
+    .mobile-btn {
+      display: none; flex-direction: column; justify-content: space-between;
+      width: 28px; height: 20px; cursor: pointer; z-index: 102;
+    }
+    .mobile-btn span {
+      display: block; height: 2.5px; width: 100%;
+      background: var(--clr-white); border-radius: 99px;
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    .mobile-btn.active span:nth-child(1) { transform: translateY(8.5px) rotate(45deg); }
+    .mobile-btn.active span:nth-child(2) { opacity: 0; }
+    .mobile-btn.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+    /* Mobile Menu Drawer */
+    .mobile-menu {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+      background: rgba(13,35,48,0.98);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      z-index: 99;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2rem;
+      opacity: 0; pointer-events: none;
+      transform: translateY(-20px);
+      transition: var(--transition);
+    }
+    .mobile-menu.open {
+      opacity: 1; pointer-events: auto; transform: translateY(0);
+    }
+    .mobile-menu .nav-link { font-size: 1.25rem; }
+    .mobile-menu .nav-cta { display: flex; flex-direction: column; width: 100%; max-width: 250px; margin-top: 1rem; }
+    .mobile-menu .btn { width: 100%; }
+
+    /* ─── Hero ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      position: relative; overflow: hidden; padding-bottom: 5rem;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        linear-gradient(to bottom, rgba(13,35,48,0.3) 0%, rgba(13,35,48,0) 35%, rgba(13,35,48,0.7) 75%, var(--clr-bg) 100%),
+        url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1600&auto=format&fit=crop&q=80') center/cover no-repeat;
+    }
+    .hero-content { position: relative; z-index: 2; padding-top: 8rem; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--glass-bg); backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 50px; padding: 0.5rem 1.1rem;
+      font-size: 0.85rem; font-weight: 500; margin-bottom: 1.5rem;
+    }
+    .hero-badge .material-symbols-rounded { font-size: 1.1rem; color: var(--clr-accent); }
+    .hero-title {
+      font-size: clamp(3.2rem, 8vw, 7.5rem);
+      font-weight: 700; line-height: 1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+    .hero-title .italic {
+      font-style: italic;
+      -webkit-text-stroke: 1.5px rgba(255,255,255,0.5);
+      color: transparent;
+    }
+    .hero-sub {
+      color: rgba(255,255,255,0.85);
+      font-size: 1.1rem; max-width: 480px;
+      margin-bottom: 2.5rem;
+    }
+    .hero-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .hero-stats {
+      display: flex; gap: 3.5rem;
+      margin-top: 4rem; padding-top: 2.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .hero-stat h3 {
+      font-size: clamp(2rem, 4vw, 2.5rem); font-weight: 700; line-height: 1;
+      color: var(--clr-white);
+    }
+    .hero-stat p { font-size: 0.9rem; color: rgba(255,255,255,0.6); margin-top: 0.25rem; }
+
+    /* ─── Search Widget ─── */
+    .search-bar {
+      display: flex; align-items: stretch;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 100px;
+      padding: 0.6rem 0.6rem 0.6rem 2rem;
+      gap: 0; max-width: 780px;
+      margin-top: 2.5rem;
+    }
+    .search-field {
+      display: flex; align-items: center; gap: 0.75rem;
+      flex: 1; min-width: 0;
+    }
+    .search-field + .search-field {
+      border-left: 1px solid rgba(255,255,255,0.15);
+      padding-left: 1.5rem; margin-left: 1.5rem;
+    }
+    .search-field .material-symbols-rounded { color: var(--clr-accent); font-size: 1.6rem; flex-shrink: 0; }
+    .search-field label { font-size: 0.78rem; color: rgba(255,255,255,0.6); font-weight: 500; display: block; margin-bottom: 2px;}
+    .search-field input {
+      background: none; border: none; outline: none;
+      color: var(--clr-white); font-family: var(--font);
+      font-size: 1rem; font-weight: 600; width: 100%;
+    }
+    .search-field input::placeholder { color: rgba(255,255,255,0.45); font-weight: 400; }
+    .btn-search {
+      background: linear-gradient(135deg, var(--clr-accent), var(--clr-accent-light));
+      color: var(--clr-white); border-radius: 50px;
+      width: 52px; height: 52px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; box-shadow: 0 4px 14px rgba(249,149,35,0.4);
+      transition: var(--transition);
+    }
+    .btn-search:hover { transform: scale(1.05); box-shadow: 0 6px 22px rgba(249,149,35,0.6); }
+
+    /* ─── Why Us ─── */
+    .why-section { background: var(--clr-bg); }
+    .why-intro { max-width: 680px; margin: 0 auto 4rem; text-align: center; }
+    .why-intro p { color: var(--clr-text-muted); font-size: 1.1rem; line-height: 1.8; margin-top: 1rem; }
+    .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .why-card {
+      background: var(--glass-bg); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md); padding: 2.5rem 2rem;
+      text-align: center; transition: var(--transition);
+    }
+    .why-card:hover { border-color: rgba(249,149,35,0.3); transform: translateY(-6px); box-shadow: var(--shadow-md); }
+    .why-icon {
+      width: 68px; height: 68px;
+      background: rgba(249,149,35,0.12); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem; font-size: 2rem; color: var(--clr-accent);
+    }
+    .why-card h4 { font-size: 1.2rem; margin-bottom: 0.75rem; }
+    .why-card p { color: var(--clr-text-muted); font-size: 0.95rem; line-height: 1.7; }
+
+    /* ─── Services ─── */
+    .services-section { background: rgba(2,115,133,0.06); }
+    .services-header { text-align: center; margin-bottom: 4rem; }
+    .services-header p { color: var(--clr-text-muted); margin-top: 1rem; font-size: 1.05rem; }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+    .service-card {
+      background: var(--glass-bg); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md); padding: 2.5rem 2rem;
+      position: relative; overflow: hidden; transition: var(--transition);
+    }
+    .service-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--clr-primary), var(--clr-bg));
+      opacity: 0; transition: var(--transition); z-index: 0;
+    }
+    .service-card:hover { transform: translateY(-8px); border-color: transparent; box-shadow: var(--shadow-md); }
+    .service-card:hover::before { opacity: 1; }
+    .service-card > * { position: relative; z-index: 1; }
+    .service-icon {
+      font-size: 2.5rem; color: var(--clr-primary);
+      margin-bottom: 1.25rem; transition: var(--transition);
+      display: block;
+    }
+    .service-card:hover .service-icon { color: var(--clr-accent); transform: scale(1.1) rotate(5deg); }
+    .service-card h3 { font-size: 1.25rem; margin-bottom: 0.75rem; transition: var(--transition); }
+    .service-card p { color: var(--clr-text-muted); font-size: 0.92rem; line-height: 1.65; transition: var(--transition); }
+    .service-card:hover p { color: rgba(255,255,255,0.8); }
+
+    /* ─── Destinations ─── */
+    .destinations-section { overflow: hidden; }
+    .dest-header { text-align: center; margin-bottom: 4rem; }
+    .dest-header p { color: var(--clr-text-muted); margin-top: 1rem; font-size: 1.05rem; }
+    .dest-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto;
+      gap: 1.25rem;
+    }
+    .dest-card {
+      border-radius: var(--radius-md); overflow: hidden;
+      position: relative; cursor: pointer; min-height: 320px;
+    }
+    .dest-card.featured { grid-column: span 2; }
+    .dest-img {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .dest-card:hover .dest-img { transform: scale(1.08); }
+    .dest-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(13,35,48,0.95) 0%, rgba(13,35,48,0) 100%);
+      padding: 3rem 1.75rem 1.75rem;
+      transform: translateY(0);
+    }
+    .dest-tag {
+      display: inline-block;
+      background: rgba(249,149,35,0.85);
+      backdrop-filter: blur(6px);
+      color: var(--clr-white);
+      font-size: 0.75rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      padding: 0.3rem 0.9rem; border-radius: 50px;
+      margin-bottom: 0.6rem;
+    }
+    .dest-overlay h3 { font-size: 1.6rem; color: var(--clr-white); margin-bottom: 0.4rem; }
+    .dest-card.featured .dest-overlay h3 { font-size: 2rem; }
+    .dest-overlay p {
+      color: rgba(255,255,255,0.8); font-size: 0.95rem;
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.4s ease, opacity 0.4s ease, margin 0.4s ease;
+      opacity: 0; margin-top: 0;
+    }
+    @media (hover: hover) {
+      .dest-card:hover .dest-overlay p { max-height: 100px; opacity: 1; margin-top: 0.5rem; }
+    }
+    @media (hover: none) {
+      .dest-overlay p { max-height: 100px; opacity: 1; margin-top: 0.5rem; }
+    }
+    
+    /* destination bg images */
+    .dest-maldives   { background-image: url('https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800&auto=format&q=75'); }
+    .dest-dubai      { background-image: url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&auto=format&q=75'); }
+    .dest-switzerland{ background-image: url('https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?w=800&auto=format&q=75'); }
+    .dest-bali       { background-image: url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&auto=format&q=75'); }
+    .dest-turkey     { background-image: url('https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?w=800&auto=format&q=75'); }
+    .dest-thailand   { background-image: url('https://images.unsplash.com/photo-1504214208698-ea1916a2195a?w=800&auto=format&q=75'); }
+
+    /* ─── About ─── */
+    .about-section { background: rgba(2,115,133,0.05); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+    .about-text p { color: var(--clr-text-muted); font-size: 1.05rem; line-height: 1.85; margin: 1.25rem 0 2rem; }
+    .values-list { display: flex; flex-direction: column; gap: 1.5rem; }
+    .value-item { display: flex; align-items: flex-start; gap: 1.25rem; }
+    .value-icon {
+      width: 48px; height: 48px; flex-shrink: 0;
+      background: rgba(2,115,133,0.15); border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--clr-primary); font-size: 1.6rem;
+    }
+    .value-item h4 { font-size: 1.05rem; margin-bottom: 0.25rem; }
+    .value-item p { color: var(--clr-text-muted); font-size: 0.95rem; }
+    .about-visual { position: relative; }
+    .img-stack { position: relative; height: 520px; }
+    .img-card {
+      position: absolute; border-radius: var(--radius-md);
+      background-size: cover; background-position: center;
+      box-shadow: var(--shadow-lg);
+    }
+    .img-card-1 {
+      width: 70%; height: 72%; top: 0; right: 0;
+      background-image: url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&auto=format&q=80');
+    }
+    .img-card-2 {
+      width: 62%; height: 58%; bottom: 0; left: 0; z-index: 2;
+      background-image: url('https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=600&auto=format&q=80');
+    }
+    .floating-badge {
+      position: absolute; top: 48%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      background: var(--clr-white); border-radius: var(--radius-md);
+      padding: 1.25rem 1.75rem; text-align: center;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+      animation: float 3.5s ease-in-out infinite;
+    }
+    .floating-badge .num {
+      font-size: 2.2rem; font-weight: 800; line-height: 1;
+      background: linear-gradient(135deg, var(--clr-accent), var(--clr-accent-light));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .floating-badge .label { font-size: 0.82rem; font-weight: 600; color: var(--clr-bg); margin-top: 0.2rem; }
+    @keyframes float { 0%,100%{transform:translate(-50%,-50%) translateY(0)} 50%{transform:translate(-50%,-50%) translateY(-10px)} }
+
+    /* ─── Blog ─── */
+    .blog-section { background: var(--clr-bg); }
+    .blog-header { text-align: center; margin-bottom: 4rem; }
+    .blog-header p { color: var(--clr-text-muted); margin-top: 1rem; }
+    .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.75rem; }
+    .blog-card {
+      background: var(--glass-bg); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md); overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: var(--transition);
+    }
+    .blog-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-md); border-color: rgba(249,149,35,0.2); }
+    .blog-thumb {
+      height: 220px; position: relative; overflow: hidden;
+      background-size: cover; background-position: center;
+    }
+    .blog-thumb::after {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(13,35,48,0.2); transition: var(--transition);
+    }
+    .blog-card:hover .blog-thumb::after { background: transparent; }
+    .blog-category {
+      position: absolute; top: 1rem; left: 1rem; z-index: 1;
+      background: rgba(255,255,255,0.92); backdrop-filter: blur(6px);
+      color: var(--clr-bg); font-size: 0.75rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
+      padding: 0.3rem 0.9rem; border-radius: 50px;
+    }
+    .blog-body { padding: 1.75rem; flex: 1; display: flex; flex-direction: column; }
+    .blog-meta {
+      display: flex; gap: 1rem; align-items: center;
+      color: var(--clr-text-muted); font-size: 0.82rem;
+      margin-bottom: 0.9rem;
+    }
+    .blog-meta span { display: flex; align-items: center; gap: 0.3rem; }
+    .blog-meta .material-symbols-rounded { font-size: 1rem; color: var(--clr-accent); }
+    .blog-card h3 { color: var(--clr-white); font-size: 1.15rem; line-height: 1.45; margin-bottom: 0.75rem; transition: var(--transition); }
+    .blog-card:hover h3 { color: var(--clr-accent); }
+    .blog-card p { color: var(--clr-text-muted); font-size: 0.95rem; line-height: 1.65; flex: 1; margin-bottom: 1.25rem; }
+    .read-more {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      color: var(--clr-accent); font-weight: 600; font-size: 0.95rem;
+    }
+    .read-more .material-symbols-rounded { font-size: 1.1rem; transition: transform 0.3s; }
+    .blog-card:hover .read-more .material-symbols-rounded { transform: translateX(5px); }
+    .blog-thumb-1 { background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&auto=format&q=75'); }
+    .blog-thumb-2 { background-image: url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&auto=format&q=75'); }
+    .blog-thumb-3 { background-image: url('https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?w=600&auto=format&q=75'); }
+
+    /* ─── FAQ ─── */
+    .faq-section { background: rgba(2,115,133,0.05); }
+    .faq-header { text-align: center; margin-bottom: 3.5rem; }
+    .faq-header p { color: var(--clr-text-muted); margin-top: 1rem; }
+    .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; max-width: 1000px; margin: 0 auto; }
+    .faq-item {
+      background: var(--glass-bg); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm); overflow: hidden;
+      transition: var(--transition);
+      align-self: start;
+    }
+    .faq-item.open { border-color: rgba(249,149,35,0.3); background: rgba(255,255,255,0.02); }
+    .faq-q {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; padding: 1.25rem 1.5rem;
+      cursor: pointer; font-weight: 600; font-size: 0.95rem;
+      user-select: none;
+    }
+    .faq-q .material-symbols-rounded {
+      font-size: 1.2rem; color: var(--clr-accent);
+      flex-shrink: 0; transition: transform 0.4s ease;
+    }
+    .faq-item.open .faq-q .material-symbols-rounded { transform: rotate(45deg); }
+    .faq-a {
+      padding: 0 1.5rem; max-height: 0; overflow: hidden;
+      color: var(--clr-text-muted); font-size: 0.95rem; line-height: 1.7;
+      transition: max-height 0.4s ease, padding 0.4s ease;
+    }
+    .faq-item.open .faq-a { max-height: 300px; padding: 0 1.5rem 1.25rem; }
+
+    /* ─── CTA ─── */
+    .cta-section {
+      position: relative; overflow: hidden; text-align: center;
+      background: linear-gradient(135deg, var(--clr-primary) 0%, var(--clr-bg) 100%);
+    }
+    .cta-section::before {
+      content: ''; position: absolute; inset: 0;
+      background: url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1200&auto=format&q=60') center/cover;
+      opacity: 0.08;
+    }
+    .cta-inner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+    .cta-inner h2 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem; }
+    .cta-inner p { color: rgba(255,255,255,0.72); font-size: 1.1rem; margin-bottom: 2.5rem; }
+    .cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ─── Contact Strip ─── */
+    .contact-strip {
+      background: var(--clr-bg);
+      border-top: 1px solid var(--glass-border);
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .contact-strip-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 2rem; flex-wrap: wrap;
+      padding: 2.5rem 1.5rem;
+    }
+    .contact-item { display: flex; align-items: center; gap: 1rem; }
+    .contact-item .material-symbols-rounded { color: var(--clr-accent); font-size: 1.8rem; }
+    .contact-item .label { font-size: 0.78rem; color: var(--clr-text-muted); text-transform: uppercase; letter-spacing: 1px; }
+    .contact-item .value { font-weight: 600; font-size: 0.95rem; margin-top: 0.1rem; }
+
+    /* ─── Map Container ─── */
+    .map-container {
+      width: 100%;
+      height: 420px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--shadow-lg);
+      position: relative;
+    }
+    .map-container iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      /* Converts standard Google Map into a beautiful Dark Mode theme */
+      filter: invert(90%) hue-rotate(180deg) brightness(85%) contrast(90%);
+      transition: var(--transition);
+    }
+    .map-container:hover iframe { filter: invert(90%) hue-rotate(180deg) brightness(100%) contrast(100%); }
+
+    /* ─── Footer ─── */
+    .footer { background: #09191f; padding: 5rem 0 2rem; }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem; margin-bottom: 4rem;
+    }
+    .footer-brand .brand-logo { margin-bottom: 1.25rem; }
+    .footer-brand p { color: var(--clr-text-muted); font-size: 0.95rem; line-height: 1.75; max-width: 320px; margin-bottom: 1.5rem; }
+    .social-links { display: flex; gap: 0.75rem; }
+    .social-link {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: var(--glass-bg); border: 1px solid var(--glass-border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.95rem; font-weight: 700; color: var(--clr-text-muted);
+      transition: var(--transition);
+    }
+    .social-link:hover { background: var(--clr-accent); color: var(--clr-white); border-color: transparent; transform: translateY(-3px);}
+    .footer-col h4 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--clr-white); margin-bottom: 1.5rem; }
+    .footer-col ul { display: flex; flex-direction: column; gap: 0.85rem; }
+    .footer-col a { color: var(--clr-text-muted); font-size: 0.95rem; transition: var(--transition); }
+    .footer-col a:hover { color: var(--clr-accent); }
+    .footer-bottom {
+      border-top: 1px solid var(--glass-border);
+      padding-top: 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-bottom p { color: var(--clr-text-muted); font-size: 0.9rem; }
+    .footer-legal { display: flex; gap: 1.5rem; }
+    .footer-legal a { color: var(--clr-text-muted); font-size: 0.9rem; transition: var(--transition); }
+    .footer-legal a:hover { color: var(--clr-accent); }
+
+    /* ─── Animations ─── */
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── Responsive (Tablets & Mobile) ─── */
+    @media (max-width: 1024px) {
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .about-visual { display: none; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .dest-grid { grid-template-columns: 1fr 1fr; }
+      .dest-card.featured { grid-column: span 2; }
+    }
+    @media (max-width: 768px) {
+      .section { padding: 4rem 0; }
+      .nav-links, .nav-cta { display: none; }
+      .mobile-btn { display: flex; }
+      .why-grid { grid-template-columns: 1fr; }
+      .services-grid { grid-template-columns: 1fr; }
+      .dest-grid { grid-template-columns: 1fr; }
+      .dest-card.featured { grid-column: span 1; }
+      .dest-card { min-height: 380px; }
+      .blog-grid { grid-template-columns: 1fr; }
+      .faq-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .hero-stats { flex-direction: column; gap: 2rem; border-top: none; padding-top: 1rem; margin-top: 2.5rem;}
+      
+      .contact-strip-inner { flex-direction: column; align-items: flex-start; gap: 1.5rem;}
+      .cta-actions { flex-direction: column; }
+      .cta-actions .btn { width: 100%; justify-content: center;}
+
+      /* Mobile Search Widget Restyling */
+      .search-bar { 
+        flex-direction: column;
+        border-radius: var(--radius-md);
+        padding: 1.5rem;
+        gap: 1.25rem;
+      }
+      .search-field { gap: 1rem; }
+      .search-field + .search-field {
+        border-left: none;
+        border-top: 1px solid rgba(255,255,255,0.15);
+        padding-left: 0; margin-left: 0; padding-top: 1.25rem;
+      }
+      .btn-search {
+        width: 100%; border-radius: 12px; height: 50px;
+        margin-top: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════ NAVBAR ══════════════════════════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="container--wide container nav-inner">
+      <a href="#" class="nav-logo" aria-label="Nuvana.go Home">
+        <!-- New Brand Logo injected here with text fallback logic -->
+        <img src="assets/nuvana.go logo full.svg" alt="Nuvana.go Logo" class="brand-logo" onerror="this.onerror=null; this.outerHTML='<span class=\'nav-logo-text\'>Nuvana<span class=\'dot\'>.</span>go</span>';">
+      </a>
+      
+      <!-- Desktop Navigation -->
+      <ul class="nav-links">
+        <li><a href="#why" class="nav-link">About</a></li>
+        <li><a href="#services" class="nav-link">Services</a></li>
+        <li><a href="#destinations" class="nav-link">Destinations</a></li>
+        <li><a href="#blog" class="nav-link">Stories</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+        <!-- New Nuvana.ex link added -->
+        <li><a href="nuvanaex.html" class="nav-link highlight">Nuvana.ex</a></li>
+      </ul>
+
+      <!-- Desktop CTA -->
+      <div class="nav-cta">
+        <a href="#contact" class="btn btn-glass">Send Inquiry</a>
+        <a href="https://nuvanago.in" class="btn btn-primary" target="_blank">Book Now</a>
+      </div>
+
+      <!-- Mobile Menu Toggle Button -->
+      <div class="mobile-btn" id="mobileBtn" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════ MOBILE MENU ══════════════════════════════════ -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#why" class="nav-link mobile-link">About Us</a>
+    <a href="#services" class="nav-link mobile-link">Services</a>
+    <a href="#destinations" class="nav-link mobile-link">Destinations</a>
+    <a href="#blog" class="nav-link mobile-link">Stories</a>
+    <a href="nuvanaex.html" class="nav-link highlight mobile-link">Nuvana.ex</a>
+    <a href="#contact" class="nav-link mobile-link">Contact</a>
+    
+    <div class="nav-cta">
+      <a href="https://nuvanago.in" class="btn btn-primary" target="_blank">Book Now</a>
+      <a href="#contact" class="btn btn-glass mobile-link">Send Inquiry</a>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ HERO ══════════════════════════════════ -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container hero-content">
+      <div class="hero-badge">
+        <span class="material-symbols-rounded">flight_takeoff</span>
+        Nature · Adventure · Freedom
+      </div>
+      <h1 class="hero-title">
+        Discover<br />
+        the <span class="italic">World</span>
+      </h1>
+      <p class="hero-sub">
+        Curated travel experiences crafted for those who seek more than a vacation — journeys that become lifelong memories.
+      </p>
+      
+      <div class="hero-actions" style="margin-bottom: 2rem;">
+        <a href="#destinations" class="btn btn-primary">
+          <span class="material-symbols-rounded">explore</span>
+          Explore Destinations
+        </a>
+        <a href="#contact" class="btn btn-glass">
+          <span class="material-symbols-rounded">calendar_month</span>
+          Plan My Trip
+        </a>
+      </div>
+
+      <form class="search-bar" onsubmit="return false">
+        <div class="search-field">
+          <span class="material-symbols-rounded">location_on</span>
+          <div>
+            <label>Destination</label>
+            <input type="text" placeholder="Where to?" />
+          </div>
+        </div>
+        <div class="search-field">
+          <span class="material-symbols-rounded">calendar_today</span>
+          <div>
+            <label>Dates</label>
+            <input type="text" placeholder="Add dates" />
+          </div>
+        </div>
+        <div class="search-field">
+          <span class="material-symbols-rounded">group</span>
+          <div>
+            <label>Travelers</label>
+            <input type="text" placeholder="Add guests" />
+          </div>
+        </div>
+        <button class="btn-search" type="submit" aria-label="Search">
+          <span class="material-symbols-rounded">search</span>
+          <span class="btn-text-mobile" style="display:none;">Search</span>
+        </button>
+      </form>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <h3 class="gradient-text">5K+</h3>
+          <p>Happy Travelers</p>
+        </div>
+        <div class="hero-stat">
+          <h3 class="gradient-text">60+</h3>
+          <p>Global Destinations</p>
+        </div>
+        <div class="hero-stat">
+          <h3 class="gradient-text">100%</h3>
+          <p>Personalized Trips</p>
+        </div>
+        <div class="hero-stat">
+          <h3 class="gradient-text">India · Oman</h3>
+          <p>Trusted Experts</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ WHY US ══════════════════════════════════ -->
+  <section class="why-section section" id="why">
+    <div class="container">
+      <div class="why-intro reveal">
+        <span class="subtitle">Our Promise</span>
+        <h2 class="section-title">Redefining Travel <span class="gradient-text">Experiences</span></h2>
+        <p>We don't sell tours — we craft journeys. Every detail from flights to candlelit dinners is curated precisely to your tastes, with local expertise that no algorithm can replicate.</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-card reveal">
+          <div class="why-icon">
+            <span class="material-symbols-rounded">verified</span>
+          </div>
+          <h4>Trusted Experts</h4>
+          <p>Over a decade of on-the-ground experience across India, the Middle East, and Southeast Asia means you travel with confidence.</p>
+        </div>
+        <div class="why-card reveal">
+          <div class="why-icon">
+            <span class="material-symbols-rounded">person_pin_circle</span>
+          </div>
+          <h4>Personalized Travel</h4>
+          <p>Bespoke itineraries built around your unique preferences, timeline, and budget. No two journeys are ever the same.</p>
+        </div>
+        <div class="why-card reveal">
+          <div class="why-icon">
+            <span class="material-symbols-rounded">support_agent</span>
+          </div>
+          <h4>Seamless Planning</h4>
+          <p>From visa assistance to airport transfers, our end-to-end support ensures your only job is to enjoy the experience.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ SERVICES ══════════════════════════════════ -->
+  <section class="services-section section" id="services">
+    <div class="container">
+      <div class="services-header reveal">
+        <span class="subtitle">What We Offer</span>
+        <h2 class="section-title">Our <span class="gradient-text">Travel Services</span></h2>
+        <p>Everything you need for a perfect journey, under one roof.</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card glass-panel reveal">
+          <span class="service-icon material-symbols-rounded">flight</span>
+          <h3>Flight Bookings</h3>
+          <p>Global flight reservations with competitive pricing and seamless booking experiences tailored to your schedule.</p>
+        </div>
+        <div class="service-card glass-panel reveal">
+          <span class="service-icon material-symbols-rounded">hotel</span>
+          <h3>Hotel Reservations</h3>
+          <p>Premium stays at vetted hotels, resorts, and luxury villas worldwide — hand-picked for every trip type.</p>
+        </div>
+        <div class="service-card glass-panel reveal">
+          <span class="service-icon material-symbols-rounded">luggage</span>
+          <h3>Holiday Packages</h3>
+          <p>All-inclusive bundles tailored for families, couples, and solo travelers. Worry-free from day one.</p>
+        </div>
+        <div class="service-card glass-panel reveal">
+          <span class="service-icon material-symbols-rounded">article</span>
+          <h3>Visa Assistance</h3>
+          <p>Hassle-free visa processing with expert guidance and complete documentation support for every destination.</p>
+        </div>
+        <div class="service-card glass-panel reveal">
+          <span class="service-icon material-symbols-rounded">map</span>
+          <h3>International Tours</h3>
+          <p>Guided tours across iconic global destinations with knowledgeable local experts leading the way.</p>
+        </div>
+        <div class="service-card glass-panel reveal">
+          <span class="service-icon material-symbols-rounded">directions_car</span>
+          <h3>Seamless Transit</h3>
+          <p>Premium airport transfers from Calicut International Airport (CCJ) ensuring a stress-free start and finish.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ DESTINATIONS ══════════════════════════════════ -->
+  <section class="destinations-section section" id="destinations">
+    <div class="container">
+      <div class="dest-header reveal">
+        <span class="subtitle">Popular Choices</span>
+        <h2 class="section-title">Global <span class="gradient-text">Destinations</span></h2>
+        <p>From tropical paradises to mountain retreats — explore the world's most iconic locations.</p>
+      </div>
+      <div class="dest-grid">
+        <div class="dest-card featured reveal">
+          <div class="dest-img dest-maldives"></div>
+          <div class="dest-overlay">
+            <span class="dest-tag">Maldives VIP</span>
+            <h3>Maldives</h3>
+            <p>Tropical paradise with crystal clear waters and luxury overwater villas.</p>
+          </div>
+        </div>
+        <div class="dest-card reveal">
+          <div class="dest-img dest-dubai"></div>
+          <div class="dest-overlay">
+            <span class="dest-tag">Desert Caravan</span>
+            <h3>Dubai</h3>
+            <p>Futuristic cityscapes, luxury shopping, and endless desert adventures.</p>
+          </div>
+        </div>
+        <div class="dest-card reveal">
+          <div class="dest-img dest-switzerland"></div>
+          <div class="dest-overlay">
+            <span class="dest-tag">Mountain Retreat</span>
+            <h3>Switzerland</h3>
+            <p>Breathtaking alpine scenery, pristine lakes, and charming villages.</p>
+          </div>
+        </div>
+        <div class="dest-card reveal">
+          <div class="dest-img dest-bali"></div>
+          <div class="dest-overlay">
+            <span class="dest-tag">Bali Retreat</span>
+            <h3>Bali</h3>
+            <p>Lush rainforests, ancient temples, and stunning volcanic beaches.</p>
+          </div>
+        </div>
+        <div class="dest-card reveal">
+          <div class="dest-img dest-turkey"></div>
+          <div class="dest-overlay">
+            <span class="dest-tag">Romantic Escape</span>
+            <h3>Turkey</h3>
+            <p>Hot air balloons, historic bazaars, and rich cultural heritage.</p>
+          </div>
+        </div>
+        <div class="dest-card reveal">
+          <div class="dest-img dest-thailand"></div>
+          <div class="dest-overlay">
+            <span class="dest-tag">Community</span>
+            <h3>Thailand</h3>
+            <p>Vibrant street life, ornate temples, and world-renowned tropical islands.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ ABOUT ══════════════════════════════════ -->
+  <section class="about-section section" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <span class="subtitle">Who We Are</span>
+          <h2 class="section-title">Your Journey Begins <span class="gradient-text">Here</span></h2>
+          <p>Based in Kozhikode, Kerala, Nuvana.go was born from a simple belief: travel should transform you. We specialize in bespoke experiences that go far beyond standard itineraries — from private candlelit dinners in Alleppey to high-altitude sunrise treks in Wayanad.</p>
+          <div class="values-list">
+            <div class="value-item">
+              <div class="value-icon">
+                <span class="material-symbols-rounded">location_on</span>
+              </div>
+              <div>
+                <h4>Kerala Roots, Global Reach</h4>
+                <p>Operating from Kozhikode across India, Oman, and beyond.</p>
+              </div>
+            </div>
+            <div class="value-item">
+              <div class="value-icon">
+                <span class="material-symbols-rounded">groups</span>
+              </div>
+              <div>
+                <h4>Community Adventures</h4>
+                <p>Trek with like-minded explorers, share campfire stories, and forge lifelong friendships.</p>
+              </div>
+            </div>
+            <div class="value-item">
+              <div class="value-icon">
+                <span class="material-symbols-rounded">favorite</span>
+              </div>
+              <div>
+                <h4>Romantic Escapes</h4>
+                <p>Custom honeymoon packages from Kozhikode — private villas, spa therapy, candlelit dinners under the stars.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="about-visual reveal">
+          <div class="img-stack">
+            <div class="img-card img-card-1"></div>
+            <div class="img-card img-card-2"></div>
+            <div class="floating-badge">
+              <span class="num">5K+</span>
+              <div class="label">Happy Travelers</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ BLOG ══════════════════════════════════ -->
+  <section class="blog-section section" id="blog">
+    <div class="container">
+      <div class="blog-header reveal">
+        <span class="subtitle">Travel Stories</span>
+        <h2 class="section-title">Tips &amp; <span class="gradient-text">Inspiration</span></h2>
+        <p>Insights, guides, and stories from our expert travelers.</p>
+      </div>
+      <div class="blog-grid">
+        <article class="blog-card reveal">
+          <div class="blog-thumb blog-thumb-1">
+            <span class="blog-category">Travel Hacks</span>
+          </div>
+          <div class="blog-body">
+            <div class="blog-meta">
+              <span><span class="material-symbols-rounded">person</span> Admin</span>
+              <span><span class="material-symbols-rounded">calendar_today</span> Oct 12, 2024</span>
+            </div>
+            <h3>How to Pack Like a Pro for a 2-Week European Tour</h3>
+            <p>Discover the secrets of traveling light without compromising on style or essentials for a long European adventure.</p>
+            <a href="#" class="read-more">Read Article <span class="material-symbols-rounded">arrow_forward</span></a>
+          </div>
+        </article>
+        <article class="blog-card reveal">
+          <div class="blog-thumb blog-thumb-2">
+            <span class="blog-category">Tips &amp; Tricks</span>
+          </div>
+          <div class="blog-body">
+            <div class="blog-meta">
+              <span><span class="material-symbols-rounded">person</span> Admin</span>
+              <span><span class="material-symbols-rounded">calendar_today</span> Sep 28, 2024</span>
+            </div>
+            <h3>Tired of Tourist Traps? We've Uncovered Hidden Gems</h3>
+            <p>Skip the crowds and discover the destinations that locals actually love — from Kerala's backwaters to Alpine secrets.</p>
+            <a href="#" class="read-more">Read Article <span class="material-symbols-rounded">arrow_forward</span></a>
+          </div>
+        </article>
+        <article class="blog-card reveal">
+          <div class="blog-thumb blog-thumb-3">
+            <span class="blog-category">Travel Hacks</span>
+          </div>
+          <div class="blog-body">
+            <div class="blog-meta">
+              <span><span class="material-symbols-rounded">person</span> Admin</span>
+              <span><span class="material-symbols-rounded">calendar_today</span> Sep 10, 2024</span>
+            </div>
+            <h3>Maximizing Frequent Flyer Miles: A Beginner's Guide</h3>
+            <p>Unlock the mysteries of reward travel and learn how to turn everyday spending into business class flights.</p>
+            <a href="#" class="read-more">Read Article <span class="material-symbols-rounded">arrow_forward</span></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ FAQ ══════════════════════════════════ -->
+  <section class="faq-section section" id="faq">
+    <div class="container">
+      <div class="faq-header reveal">
+        <span class="subtitle">Got Questions?</span>
+        <h2 class="section-title">Frequently <span class="gradient-text">Asked</span></h2>
+        <p>Everything you need to know before booking with us.</p>
+      </div>
+      <div class="faq-grid">
+        <div class="faq-item">
+          <div class="faq-q">
+            <span>Can we customize the itinerary completely?</span>
+            <span class="material-symbols-rounded">add</span>
+          </div>
+          <div class="faq-a">Absolutely. We specialize in bespoke travel. If you want a private candlelit dinner in Alleppey, we arrange it precisely to your tastes.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">
+            <span>Do you provide airport transfers from CCJ?</span>
+            <span class="material-symbols-rounded">add</span>
+          </div>
+          <div class="faq-a">Yes — we offer premium airport transfers from Calicut International Airport (CCJ) ensuring a stress-free start and end to every journey.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">
+            <span>What is the best time to book a honeymoon from Kozhikode?</span>
+            <span class="material-symbols-rounded">add</span>
+          </div>
+          <div class="faq-a">We recommend booking at least 6–8 weeks in advance for peak season destinations. Our team will guide you based on your chosen destination and budget.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">
+            <span>Do tours start directly from Thamarassery?</span>
+            <span class="material-symbols-rounded">add</span>
+          </div>
+          <div class="faq-a">Yes — our group trekking tours begin from Thamarassery, the gateway to Wayanad, with expert-led expeditions into untouched wilderness.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">
+            <span>What fitness level is required for group treks?</span>
+            <span class="material-symbols-rounded">add</span>
+          </div>
+          <div class="faq-a">We offer treks for all fitness levels. Each expedition listing specifies the difficulty. Our guides adapt pace to ensure everyone has a rewarding experience.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">
+            <span>What is the best time to visit Wayanad for trekking?</span>
+            <span class="material-symbols-rounded">add</span>
+          </div>
+          <div class="faq-a">October to February offers ideal trekking conditions in Wayanad — cooler temperatures, clear skies, and lush post-monsoon landscapes.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ CTA ══════════════════════════════════ -->
+  <section class="cta-section section" id="contact">
+    <div class="container">
+      <div class="cta-inner reveal">
+        <span class="subtitle">Start Your Adventure</span>
+        <h2>Let's Plan Your <span class="gradient-text">Next Adventure</span></h2>
+        <p>Your journey begins here. We curate experiences that turn into lifelong memories — tell us your dream destination.</p>
+        <div class="cta-actions">
+          <a href="https://wa.me/919895XXXXXX" class="btn btn-primary" target="_blank">
+            <span class="material-symbols-rounded">chat</span>
+            Chat on WhatsApp
+          </a>
+          <a href="mailto:hello@nuvanago.in" class="btn btn-glass">
+            <span class="material-symbols-rounded">mail</span>
+            Send Inquiry
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ CONTACT STRIP ══════════════════════════════════ -->
+  <div class="contact-strip">
+    <div class="container contact-strip-inner">
+      <div class="contact-item">
+        <span class="material-symbols-rounded">location_on</span>
+        <div>
+          <div class="label">Our Office</div>
+          <div class="value">Near Govt UP School, Karadi, Thamarassery</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <span class="material-symbols-rounded">location_city</span>
+        <div>
+          <div class="label">City</div>
+          <div class="value">Calicut, Kerala 673573, India</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <span class="material-symbols-rounded">mail</span>
+        <div>
+          <div class="label">Email Us</div>
+          <div class="value">hello@nuvanago.in</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <span class="material-symbols-rounded">language</span>
+        <div>
+          <div class="label">Presence</div>
+          <div class="value">India · Oman</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ MAP ══════════════════════════════════ -->
+  <section class="section" style="padding: 4rem 0 0 0; background: var(--clr-bg);">
+    <div class="container">
+      <div class="map-container reveal">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3910.952788468487!2d75.93332747587354!3d11.41097294716733!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba669cfe830efcb%3A0xa6bd172f1aeee84c!2sNuvana.go!5e0!3m2!1sen!2som!4v1779352812544!5m2!1sen!2som" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════ FOOTER ══════════════════════════════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <!-- Replaced with custom logo -->
+          <img src="assets/nuvana.go logo full.svg" alt="Nuvana.go Logo" class="brand-logo" onerror="this.onerror=null; this.outerHTML='<div class=\'nav-logo-text\' style=\'margin-bottom:1rem;\'>Nuvana<span class=\'dot\'>.</span>go</div>';">
+          
+          <p>Curated travel experiences, unforgettable journeys, and seamless planning — from Kozhikode to the world.</p>
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="Instagram">in</a>
+            <a href="#" class="social-link" aria-label="Facebook">f</a>
+            <a href="#" class="social-link" aria-label="YouTube">yt</a>
+            <a href="#" class="social-link" aria-label="WhatsApp">wa</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="#">Flight Bookings</a></li>
+            <li><a href="#">Hotel Reservations</a></li>
+            <li><a href="#">Holiday Packages</a></li>
+            <li><a href="#">Visa Assistance</a></li>
+            <li><a href="#">International Tours</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Destinations</h4>
+          <ul>
+            <li><a href="#">Maldives</a></li>
+            <li><a href="#">Dubai</a></li>
+            <li><a href="#">Switzerland</a></li>
+            <li><a href="#">Bali</a></li>
+            <li><a href="#">Turkey</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Travel Stories</a></li>
+            <li><a href="nuvanaex.html" class="highlight" style="color:var(--clr-accent)">Nuvana.ex</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Support Desk</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Nuvana Group. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ─── Navbar scroll effect ───
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // ─── Scroll reveal ───
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+
+    // ─── FAQ accordion ───
+    document.querySelectorAll('.faq-q').forEach(q => {
+      q.addEventListener('click', () => {
+        const item = q.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+
+    // ─── Mobile Menu Functionality ───
+    const mobileBtn = document.getElementById('mobileBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileLinks = document.querySelectorAll('.mobile-link');
+
+    // Toggle menu
+    mobileBtn.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.contains('open');
+      
+      mobileBtn.classList.toggle('active');
+      mobileMenu.classList.toggle('open');
+      mobileBtn.setAttribute('aria-expanded', !isOpen);
+      
+      // Prevent body scrolling when menu is open
+      document.body.style.overflow = !isOpen ? 'hidden' : '';
+    });
+
+    // Close menu when a link is clicked
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileBtn.classList.remove('active');
+        mobileMenu.classList.remove('open');
+        mobileBtn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      });
+    });
+  </script>
+</body>
+</html>
