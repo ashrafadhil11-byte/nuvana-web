@@ -168,7 +168,7 @@
     <!-- Background Image -->
     <div class="absolute inset-0 z-0">
       <div class="absolute inset-0 bg-gradient-to-b from-[#0d2330]/80 via-[#0d2330]/60 to-[#0d2330] z-10"></div>
-      <img src="assets/ex169.jpeg" class="w-full h-full object-cover opacity-60" alt="Logistics Background" onerror="this.src='https://images.unsplash.com/photo-1586528116311-ad8ed7c83a56?auto=format&fit=crop&q=80&w=1600';">
+      <img src="assets/ex43.jpeg" class="w-full h-full object-cover opacity-60" alt="Logistics Background" onerror="this.src='https://images.unsplash.com/photo-1586528116311-ad8ed7c83a56?auto=format&fit=crop&q=80&w=1600';">
     </div>
     
     <div class="max-w-7xl mx-auto w-full relative z-20 flex flex-col items-center text-center">
@@ -698,6 +698,17 @@
     }
 
     function renderTrackingSuccess(pkgData, inputId) {
+      // Date Formatter Helper to strictly show ONLY the date
+      const formatOnlyDate = (dateStr) => {
+        if (!dateStr || dateStr === '—') return dateStr;
+        const d = new Date(dateStr);
+        if (!isNaN(d.getTime())) {
+          return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+        // Fallback: roughly strip time strings if Date parsing fails
+        return String(dateStr).replace(/\s\d{1,2}:\d{2}.*/, '');
+      };
+
       // Data Extraction
       const bookingId = getVal(pkgData, ['booking', 'tracking', 'id', 'reference'], inputId).toUpperCase();
       let currentStatus = getVal(pkgData, ['status', 'state', 'condition'], '');
@@ -709,8 +720,13 @@
       const awb = getVal(pkgData, ['docket', 'awb', 'waybill'], '—');
       const pieces = getVal(pkgData, ['pieces', 'qty', 'quantity', 'boxes'], '—');
       const weight = getVal(pkgData, ['weight', 'kg', 'kgs'], '—');
-      const dod = getVal(pkgData, ['dod', 'date of delivery', 'delivered on'], '');
-      const bookingDate = getVal(pkgData, ['date', 'booking date', 'created'], '—');
+      
+      // Formatting specific dates to remove time
+      let dod = getVal(pkgData, ['dod', 'date of delivery', 'delivered on'], '');
+      dod = dod ? formatOnlyDate(dod) : '';
+      
+      let bookingDate = getVal(pkgData, ['date', 'booking date', 'created'], '—');
+      bookingDate = bookingDate !== '—' ? formatOnlyDate(bookingDate) : '—';
       
       let logs = pkgData['Tracking_Logs'] || [];
 
@@ -877,8 +893,10 @@
         
         [...logs].reverse().forEach((log, idx) => {
           const isLatest = idx === 0;
-          // Extract specific Date first, then fallback
-          const dateVal = log['Adjusted Date/Time'] || log['Adjusted Date'] || log['Date'] || log['Timestamp'] || '';
+          // Extract specific Date first, then fallback, and strictly format to DATE ONLY
+          const dateValRaw = log['Adjusted Date/Time'] || log['Adjusted Date'] || log['Date'] || log['Timestamp'] || '';
+          const dateVal = formatOnlyDate(dateValRaw);
+          
           const locVal = convertFlagToCountry(log['Location'] || log['Facility'] || log['City'] || '');
           const statVal = log['Status'] || log['Update'] || log['Event'] || 'System Update';
           const descVal = log['Description'] || log['Remarks'] || log['Details'] || '';
