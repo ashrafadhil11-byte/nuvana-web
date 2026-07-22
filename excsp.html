@@ -29,6 +29,9 @@
       --clr-primary: #027385;
       --clr-accent: #f99523;
       --clr-accent-light: #fbb360;
+      
+      --clr-error: #EF4444;
+      --clr-success: #10B981;
     }
     
     body { 
@@ -36,8 +39,8 @@
       background: var(--clr-bg); 
       color: var(--clr-text); 
       overflow-x: hidden; 
-      -webkit-tap-highlight-color: transparent; /* Removes default tap highlight */
-      touch-action: manipulation; /* Optimizes touch responsiveness */
+      -webkit-tap-highlight-color: transparent; 
+      touch-action: manipulation; 
     }
 
     /* ══ PWA MICRO-ANIMATIONS & CARDS ══ */
@@ -49,6 +52,7 @@
       transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
       cursor: pointer;
     }
+    
     /* Touch down (active) state for native feel */
     .surface-card:active, .btn-active:active { 
       transform: scale(0.96); 
@@ -116,7 +120,7 @@
     }
     .timeline-item.latest .timeline-dot {
       border-color: var(--clr-accent); background: var(--clr-surface);
-      box-shadow: 0 0 0 4px rgba(249,149,35,0.1);
+      box-shadow: 0 0 0 4px rgba(249,149,35,0.15);
     }
     
     /* Hide scrollbar for PWA smoothness */
@@ -142,12 +146,12 @@
           <span class="material-symbols-rounded text-3xl text-orange-500">account_circle</span>
         </div>
         <h2 class="text-2xl font-extrabold text-gray-900 mb-2">Customer Portal</h2>
-        <p class="text-gray-500 text-sm mb-8">Enter your registered mobile number to access your shipments.</p>
+        <p class="text-gray-500 text-sm mb-8">Enter your registered mobile number to securely access your shipments.</p>
         
         <form id="login-form" onsubmit="handleLogin(event)">
           <div class="relative mb-6 text-left">
             <span class="material-symbols-rounded absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">call</span>
-            <input type="tel" id="phone-input" class="w-full bg-white border border-gray-300 rounded-2xl py-4 pl-12 pr-4 text-gray-900 font-bold focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all shadow-sm" placeholder="e.g. +971 50 123 4567" required autocomplete="tel">
+            <input type="tel" id="phone-input" class="w-full bg-white border border-gray-300 rounded-2xl py-4 pl-12 pr-4 text-gray-900 font-bold focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all shadow-sm" placeholder="e.g. 971 50 123 4567" required autocomplete="tel">
           </div>
           
           <button type="submit" id="login-btn" class="btn-active w-full bg-gradient-to-r from-orange-500 to-orange-400 text-white font-bold py-4 rounded-2xl shadow-[0_8px_20px_rgba(249,149,35,0.25)] flex items-center justify-center gap-2 transition-transform">
@@ -177,7 +181,7 @@
       <div class="flex items-center justify-between px-6 py-4 max-w-3xl mx-auto">
         <div>
           <p class="text-gray-500 text-[11px] font-bold uppercase tracking-widest mb-0.5" id="time-greeting">Good Morning</p>
-          <h1 class="text-xl font-extrabold text-gray-900 truncate max-w-[200px]" id="user-greeting">Customer</h1>
+          <h1 class="text-xl font-extrabold text-gray-900 truncate max-w-[250px]" id="user-greeting">Customer</h1>
         </div>
         <button onclick="logout()" class="btn-active w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 transition hover:bg-red-50 hover:text-red-500">
           <span class="material-symbols-rounded">logout</span>
@@ -208,7 +212,7 @@
       <div class="flex border-b border-gray-200 mb-6">
         <button onclick="switchTab('active')" id="tab-active" class="tab-btn active flex-1 pb-3 text-sm flex justify-center items-center gap-2 btn-active">
           <span>Active</span>
-          <span class="bg-orange-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full" id="badge-active">0</span>
+          <span class="bg-orange-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-sm" id="badge-active">0</span>
         </button>
         <button onclick="switchTab('past')" id="tab-past" class="tab-btn flex-1 pb-3 text-sm flex justify-center items-center gap-2 btn-active">
           <span>Past</span>
@@ -230,18 +234,18 @@
 
   <!-- ══════════════════════════════════ TRACKING MODAL ══════════════════════════════════ -->
   <div id="trackingModal" class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-[2000] flex items-end md:items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
-    <div class="bg-white w-full max-w-3xl rounded-t-[32px] md:rounded-3xl shadow-2xl p-6 md:p-10 relative transform translate-y-full md:translate-y-8 transition-transform duration-400 cubic-bezier(0.4, 0, 0.2, 1) max-h-[90vh] flex flex-col" id="trackingModalContent">
+    <div class="bg-white w-full max-w-3xl rounded-t-[32px] md:rounded-3xl shadow-2xl p-6 md:p-10 relative transform translate-y-full md:translate-y-8 transition-transform duration-400 cubic-bezier(0.4, 0, 0.2, 1) max-h-[92vh] flex flex-col" id="trackingModalContent">
       
       <!-- Drag handle mobile -->
       <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-6 md:hidden"></div>
 
       <!-- Close Btn -->
-      <button onclick="closeTrackingModal()" class="btn-active absolute top-5 right-5 md:top-6 md:right-6 w-10 h-10 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center z-20">
+      <button onclick="closeTrackingModal()" class="btn-active absolute top-5 right-5 md:top-6 md:right-6 w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center z-20 transition">
         <span class="material-symbols-rounded">close</span>
       </button>
       
       <div id="trackingResultsTarget" class="overflow-y-auto flex-1 pr-2 pb-6 custom-scrollbar">
-        <!-- Loader / Content injected here -->
+        <!-- Content injected here -->
       </div>
     </div>
   </div>
@@ -304,42 +308,17 @@
       return String(dateStr).replace(/\s\d{1,2}:\d{2}.*/, '');
     };
 
-    const extractTime = (dateStr) => {
-      if (!dateStr || dateStr === '—') return '';
-      const d = new Date(dateStr);
-      if (!isNaN(d.getTime())) {
-        return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-      }
-      const match = String(dateStr).match(/\d{1,2}:\d{2}/);
-      return match ? match[0] : '';
-    };
-
-    // Status logic refined for Light Mode styling
-    const getProg = (str) => {
-      const s = String(str).toLowerCase();
-      // Red Error Flag
-      if (s.includes('return') || s.includes('cancel') || s.includes('hold')) 
-        return { step: 0, w: 0, c: '#EF4444', bg: 'bg-red-50 text-red-600 border-red-200', icon: 'error' };
-      // Green Delivered Flag
-      if (s.includes('deliver')) 
-        return { step: 4, w: 100, c: '#10B981', bg: 'bg-emerald-50 text-emerald-600 border-emerald-200', icon: 'check_circle' };
-      // Last Mile
-      if (s.includes('out for delivery') || s.includes('to delivery station') || s.includes('last mile')) 
-        return { step: 3, w: 75, c: '#f99523', bg: 'bg-orange-50 text-orange-600 border-orange-200', icon: 'local_shipping' };
-      // Origin
-      if (s.includes('pick') || s.includes('booked') || s.includes('origin')) 
-        return { step: 1, w: 15, c: '#f99523', bg: 'bg-amber-50 text-amber-600 border-amber-200', icon: 'inventory_2' };
-      // In-Transit Default
-      return { step: 2, w: 50, c: '#f99523', bg: 'bg-orange-50 text-orange-600 border-orange-200', icon: 'flight_takeoff' }; 
-    };
-
-    // --- Authentication ---
+    // --- Authentication & Matching Logic ---
     async function handleLogin(e) {
       e.preventDefault();
       const rawInput = document.getElementById('phone-input').value;
-      // Strip everything except digits to handle spaces/symbols
       const cleanInput = rawInput.replace(/\D/g, ''); 
-      if (!cleanInput) return;
+      
+      if (cleanInput.length < 6) {
+        errorText.textContent = "Please enter a valid mobile number.";
+        loginError.classList.remove('hidden');
+        return;
+      }
 
       // Loading state
       loginError.classList.add('hidden');
@@ -348,32 +327,34 @@
       loginBtn.classList.add('opacity-80', 'pointer-events-none');
 
       try {
-        // Calling the API
-        const apiUrl = `https://script.google.com/macros/s/AKfycbzn8cMCVzTpVOkN_8fTtH_5-TJdqBN8NJeB8iZSF4KX0ncFyEJXdLi984aYyZ8V9EW1/exec?id=${encodeURIComponent(cleanInput)}&tracking=${encodeURIComponent(cleanInput)}`;
+        // Because the backend script was updated, we only need to pass ?phone= once.
+        const apiUrl = `https://script.google.com/macros/s/AKfycbzn8cMCVzTpVOkN_8fTtH_5-TJdqBN8NJeB8iZSF4KX0ncFyEJXdLi984aYyZ8V9EW1/exec?phone=${encodeURIComponent(cleanInput)}`;
+        
         const response = await fetch(apiUrl);
         const data = await response.json();
-
-        let matchingShipments = [];
         
-        // Strict Client-Side Filter: Remove non-digits from all DB values and compare
-        if (data && !Array.isArray(data) && Object.keys(data).length > 0 && !data.error) {
-           const hasMatch = Object.values(data).some(val => val && val.toString().replace(/\D/g, '').includes(cleanInput));
-           if(hasMatch) matchingShipments = [data];
-        } else if (Array.isArray(data)) {
-          matchingShipments = data.filter(pkg => {
-            return Object.values(pkg).some(val => val && val.toString().replace(/\D/g, '').includes(cleanInput));
-          });
+        // Handle backend explicit errors
+        if (data.error) {
+           throw new Error(data.error);
         }
 
-        if (matchingShipments.length === 0) {
+        // Data should be an array of matching shipments from the new backend
+        let shipments = [];
+        if (Array.isArray(data)) {
+            shipments = data;
+        } else if (typeof data === 'object' && Object.keys(data).length > 0) {
+            shipments = [data]; // Wrap single object in array just in case
+        }
+
+        if (shipments.length === 0) {
           throw new Error("No shipments found.");
         }
 
-        processShipmentData(matchingShipments);
+        processShipmentData(shipments);
         showDashboard();
 
       } catch (err) {
-        console.error(err);
+        console.error("Login Error:", err);
         errorText.textContent = "We couldn't locate any shipments linked to this mobile number.";
         loginError.classList.remove('hidden');
       } finally {
@@ -383,15 +364,39 @@
       }
     }
 
+    // --- Data Processing & Logic Mapping ---
     function processShipmentData(shipments) {
       appData.active = [];
       appData.past = [];
       
-      // Extract Customer Full Name
+      // Extract Customer Full Name from the most recent package
       if(shipments.length > 0) {
-        let name = getVal(shipments[0], ['shipper', 'sender', 'name', 'customer'], 'Customer');
-        appData.customerName = name.trim();
+        let foundName = '';
+        for (const pkg of shipments) {
+          let name = getVal(pkg, ['shipper', 'sender', 'name', 'customer'], '');
+          if (name && name.trim() !== '') {
+            foundName = name.trim();
+            break;
+          }
+        }
+        appData.customerName = foundName || 'Customer';
       }
+
+      // Status Logic Mapping (Light Theme Specific Styling)
+      const getProg = (str) => {
+        const s = String(str).toLowerCase();
+        
+        if (s.includes('return') || s.includes('cancel') || s.includes('hold')) 
+          return { step: 0, w: 0, c: 'var(--clr-error)', bg: 'bg-red-50 text-red-600 border-red-200', icon: 'error' };
+        if (s.includes('deliver')) 
+          return { step: 4, w: 100, c: 'var(--clr-success)', bg: 'bg-emerald-50 text-emerald-600 border-emerald-200', icon: 'check_circle' };
+        if (s.includes('out for delivery') || s.includes('to delivery station') || s.includes('last mile')) 
+          return { step: 3, w: 75, c: 'var(--clr-accent)', bg: 'bg-orange-50 text-orange-600 border-orange-200', icon: 'local_shipping' };
+        if (s.includes('pick') || s.includes('booked') || s.includes('origin')) 
+          return { step: 1, w: 15, c: 'var(--clr-accent)', bg: 'bg-amber-50 text-amber-600 border-amber-200', icon: 'inventory_2' };
+        
+        return { step: 2, w: 50, c: 'var(--clr-accent)', bg: 'bg-orange-50 text-orange-600 border-orange-200', icon: 'flight_takeoff' }; 
+      };
 
       // Categorize
       shipments.forEach(pkg => {
@@ -406,6 +411,7 @@
         pkg._extractedStatus = status;
         pkg._prog = prog;
 
+        // Route to Past if Delivered or Error/Returned
         if (prog.step === 4 || prog.step === 0) {
           appData.past.push(pkg);
         } else {
@@ -425,14 +431,18 @@
 
     // --- UI Navigation ---
     function showDashboard() {
-      // Time-based Greeting
+      // Dynamic Time-based Greeting
       const hr = new Date().getHours();
       let greeting = 'Good Evening';
       if (hr < 12) greeting = 'Good Morning';
       else if (hr < 18) greeting = 'Good Afternoon';
 
       document.getElementById('time-greeting').textContent = greeting;
-      document.getElementById('user-greeting').textContent = appData.customerName;
+      
+      // Clean up the name for display
+      let displayTitle = appData.customerName;
+      displayTitle = displayTitle.replace(/\b\w/g, l => l.toUpperCase()); // Title Case
+      document.getElementById('user-greeting').textContent = displayTitle;
       
       document.getElementById('stat-active').textContent = appData.active.length;
       document.getElementById('stat-delivered').textContent = appData.past.length;
@@ -480,11 +490,12 @@
       }
     }
 
+    // --- Render Shipment Lists ---
     function renderList(type, container) {
       const dataArr = appData[type];
       if(dataArr.length === 0) {
         container.innerHTML = `
-          <div class="text-center p-8 border-2 border-dashed border-gray-200 rounded-2xl">
+          <div class="text-center p-8 border-2 border-dashed border-gray-200 rounded-2xl bg-white mt-4">
             <span class="material-symbols-rounded text-4xl text-gray-300 mb-2">inbox</span>
             <p class="text-gray-500 text-sm font-medium">No ${type} shipments found.</p>
           </div>
@@ -506,7 +517,7 @@
 
         html += `
           <div class="surface-card p-4 relative overflow-hidden group" onclick="openShipmentModal('${type}', ${index})">
-            <!-- Very subtle glow hint -->
+            <!-- Subtle glow hint behind status -->
             <div class="absolute -right-6 -top-6 w-24 h-24 blur-2xl opacity-10" style="background-color: ${prog.c}"></div>
             
             <div class="flex justify-between items-start mb-4 relative z-10">
@@ -514,7 +525,7 @@
                 <p class="text-gray-400 text-[10px] uppercase font-bold tracking-widest mb-0.5">Tracking ID</p>
                 <h4 class="text-lg font-black text-gray-900">${id}</h4>
               </div>
-              <div class="px-2.5 py-1 rounded-md border text-[10px] font-bold uppercase tracking-wider ${prog.bg}">
+              <div class="px-2.5 py-1 rounded-md border text-[10px] font-bold uppercase tracking-wider shadow-sm ${prog.bg}">
                 ${status}
               </div>
             </div>
@@ -531,13 +542,13 @@
               </div>
             </div>
 
-            <div class="flex justify-between items-center relative z-10">
+            <div class="flex justify-between items-center relative z-10 border-t border-gray-100 pt-3 mt-1">
               <p class="text-xs text-gray-500 font-medium flex items-center gap-1">
                 <span class="material-symbols-rounded text-[14px]">calendar_today</span>
                 ${dateStr}
               </p>
               <span class="text-xs font-bold text-orange-500 flex items-center gap-1">
-                Details <span class="material-symbols-rounded text-[14px]">chevron_right</span>
+                View Details <span class="material-symbols-rounded text-[14px]">chevron_right</span>
               </span>
             </div>
           </div>
@@ -580,6 +591,7 @@
       if(e.target === tModal) closeTrackingModal();
     });
 
+    // --- Render Modal Internal Detail ---
     function renderModalDetails(pkgData, inputId) {
       const currentStatus = pkgData._extractedStatus;
       const pData = pkgData._prog;
@@ -588,14 +600,12 @@
       const pieces = getVal(pkgData, ['pieces', 'qty', 'quantity', 'boxes'], '—');
       const weight = getVal(pkgData, ['weight', 'kg', 'kgs'], '—');
       const agent = getVal(pkgData, ['agent', 'forwarder', 'forwarding', 'carrier'], 'Nuvana.ex Network');
-      const shipper = getVal(pkgData, ['shipper', 'sender'], '—');
       
       let dod = getVal(pkgData, ['dod', 'date of delivery', 'delivered on'], '');
       dod = dod ? formatOnlyDate(dod) : '';
       
       let logs = pkgData['Tracking_Logs'] || [];
       const isErr = pData.step === 0;
-      const isDelivered = pData.step === 4;
 
       let html = `
         <div class="flex flex-col justify-between items-start border-b border-gray-100 pb-5 mb-6 gap-3">
@@ -609,6 +619,7 @@
           </div>
         </div>
 
+        <!-- Section: Routing & Progress -->
         <div class="bg-gray-50 border border-gray-100 rounded-2xl p-5 mb-6 relative overflow-hidden shadow-inner">
           <div class="flex justify-between items-center relative z-10 mb-8">
             <div class="w-[40%]">
@@ -631,7 +642,7 @@
             <div class="absolute left-0 w-full top-1/2 h-1.5 bg-gray-200 -translate-y-1/2 rounded-full z-0"></div>
             <!-- Active Track -->
             <div class="absolute left-0 top-1/2 h-1.5 -translate-y-1/2 rounded-full z-0 transition-all duration-1000 ease-out" 
-                 style="width: ${pData.w}%; background: ${pData.c};"></div>
+                 style="width: ${isErr ? '100' : pData.w}%; background: ${pData.c};"></div>
             
             ${[
               { label: 'Origin', s: 1 }, 
@@ -640,17 +651,14 @@
               { label: 'Delivered', s: 4 }
             ].map(node => {
               const isActive = pData.step === node.s && !isErr;
-              const isPast = pData.step > node.s || (isErr && node.s === 1); 
+              const isPast = pData.step > node.s || isErr; 
               
               let dotClass = "w-5 h-5 md:w-7 md:h-7 rounded-full flex items-center justify-center z-10 transition-all duration-500 relative bg-white border-2 border-gray-300";
               let dotStyle = "";
               let innerContent = "";
 
-              if (isErr && pData.step === 0 && node.s > 1) {
-                 // Future nodes on error remain gray
-              } else if (isErr) {
-                 dotClass = "w-5 h-5 md:w-7 md:h-7 rounded-full flex items-center justify-center z-10 relative shadow-sm border border-red-500";
-                 dotStyle = `background: #fef2f2;`;
+              if (isErr) {
+                 dotClass = "w-5 h-5 md:w-7 md:h-7 rounded-full flex items-center justify-center z-10 relative shadow-sm border border-red-500 bg-red-50";
                  innerContent = `<span class="material-symbols-rounded text-red-500 text-[14px] md:text-[18px] font-black">close</span>`;
               } else if (isPast) {
                 dotClass = "w-5 h-5 md:w-7 md:h-7 rounded-full flex items-center justify-center z-10 relative shadow-sm border border-transparent";
@@ -700,7 +708,18 @@
           const dtStr = log['Adjusted Date/Time'] || log['Adjusted Date'] || log['Date'] || log['Timestamp'] || '';
           
           const dateVal = formatOnlyDate(dtStr);
-          const timeVal = extractTime(dtStr);
+          
+          // Smart Time Extraction (Extracting HH:MM cleanly)
+          let timeVal = '';
+          if(dtStr) {
+             const d = new Date(dtStr);
+             if(!isNaN(d.getTime())) {
+                timeVal = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+             } else {
+                const match = String(dtStr).match(/\d{1,2}:\d{2}/);
+                timeVal = match ? match[0] : '';
+             }
+          }
           
           const locVal = convertFlagToCountry(log['Location'] || log['Facility'] || log['City'] || '');
           const statVal = log['Status'] || log['Update'] || log['Event'] || 'System Update';
@@ -711,22 +730,22 @@
               <div class="timeline-dot"></div>
               <div class="pl-3 pb-1">
                 <div class="flex items-center gap-1.5 mb-1.5 flex-wrap">
-                  <span class="text-[10px] font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded border border-orange-100 flex items-center gap-1">
+                  <span class="text-[10px] font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded border border-orange-100 flex items-center gap-1 shadow-sm">
                     <span class="material-symbols-rounded text-[10px]">calendar_month</span> ${dateVal}
                   </span>
                   ${timeVal ? `
-                  <span class="text-[10px] font-bold text-gray-600 bg-gray-100 px-2 py-0.5 rounded border border-gray-200 flex items-center gap-1">
+                  <span class="text-[10px] font-bold text-gray-600 bg-gray-100 px-2 py-0.5 rounded border border-gray-200 flex items-center gap-1 shadow-sm">
                     <span class="material-symbols-rounded text-[10px]">schedule</span> ${timeVal}
                   </span>
                   ` : ''}
                   ${locVal ? `
-                  <span class="text-[10px] font-bold text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-200 flex items-center gap-1">
+                  <span class="text-[10px] font-bold text-gray-500 bg-white px-2 py-0.5 rounded border border-gray-200 flex items-center gap-1 shadow-sm">
                     <span class="material-symbols-rounded text-[10px]">pin_drop</span> ${locVal}
                   </span>` : ''}
                 </div>
                 <h4 class="text-base font-extrabold text-gray-900 mb-1 leading-tight">${statVal}</h4>
                 ${descVal ? `
-                  <div class="bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-xs text-gray-600 font-medium inline-block max-w-full mt-1 leading-snug">
+                  <div class="bg-white border border-gray-200 shadow-sm rounded-lg p-2.5 text-xs text-gray-600 font-medium inline-block max-w-full mt-1 leading-snug">
                     ${descVal}
                   </div>
                 ` : ''}
